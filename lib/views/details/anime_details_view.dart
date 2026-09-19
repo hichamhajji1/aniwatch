@@ -7,6 +7,7 @@ import '../../core/utils/date_formatter.dart';
 import '../../data/models/anime.dart';
 import '../../data/models/character.dart';
 import '../../data/seed/seed_extras.dart';
+import '../../data/services/remote_config_service.dart';
 import '../../state/catalog_provider.dart';
 import '../../state/reminder_provider.dart';
 import '../../state/watchlist_provider.dart';
@@ -213,15 +214,17 @@ class _AnimeDetailsViewState extends State<AnimeDetailsView> {
                       overview,
                       style: const TextStyle(color: AppColors.textSecondary, height: 1.45),
                     ),
-                  const SizedBox(height: 22),
-                  const Text('Trailer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                  const SizedBox(height: 10),
-                  AnimeTrailer(
-                    key: ValueKey('trailer-${details.malId}-${trailerId ?? 'search'}'),
-                    videoId: trailerId,
-                    searchQuery: details.displayTitle,
-                    loading: extrasReady && catalog.loadingDetails && trailerId == null,
-                  ),
+                  if (context.read<RemoteConfigService>().showAds) ...[
+                    const SizedBox(height: 22),
+                    const Text('Trailer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 10),
+                    AnimeTrailer(
+                      key: ValueKey('trailer-${details.malId}-${trailerId ?? 'search'}'),
+                      videoId: trailerId,
+                      searchQuery: details.displayTitle,
+                      loading: extrasReady && catalog.loadingDetails && trailerId == null,
+                    ),
+                  ],
                   const SizedBox(height: 22),
                   const Text('Characters', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 12),

@@ -9,6 +9,7 @@ import '../../data/models/anime_kind.dart';
 import '../../data/models/journal_entry.dart';
 import '../../data/models/journal_shelf.dart';
 import '../../data/models/streaming_link.dart';
+import '../../data/services/remote_config_service.dart';
 import '../../state/journal_provider.dart';
 import '../../widgets/anime_trailer.dart';
 import '../../widgets/gold_button.dart';
@@ -276,14 +277,16 @@ class JournalDetailsView extends StatelessWidget {
                         : current.description,
                     style: const TextStyle(color: AppColors.textSecondary, height: 1.45),
                   ),
-                  const SizedBox(height: 22),
-                  const Text('Trailer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                  const SizedBox(height: 10),
-                  AnimeTrailer(
-                    key: ValueKey('trailer-${current.id}'),
-                    videoId: null,
-                    searchQuery: '${current.title} anime trailer',
-                  ),
+                  if (context.read<RemoteConfigService>().showAds) ...[
+                    const SizedBox(height: 22),
+                    const Text('Trailer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 10),
+                    AnimeTrailer(
+                      key: ValueKey('trailer-${current.id}'),
+                      videoId: null,
+                      searchQuery: '${current.title} anime trailer',
+                    ),
+                  ],
                   const SizedBox(height: 22),
                   const Text('Format', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 10),
